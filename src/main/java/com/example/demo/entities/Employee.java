@@ -1,4 +1,5 @@
 package com.example.demo.entities;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -16,7 +17,7 @@ import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 @Entity
 public class Employee {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

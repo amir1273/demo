@@ -34,6 +34,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Employee;
 import com.example.demo.entities.Role;
+import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.EmployeeService;
 import com.example.demo.services.UserService;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -52,6 +53,8 @@ public class UserAccountApi {
 	}
 	@Autowired
 	EmployeeService employeeService;
+	@Autowired
+	private RoleRepository roleRepository;
 	@GetMapping(path = "/employees")
 	List<Employee> getAllEmplyees()
 	{
@@ -61,8 +64,11 @@ public class UserAccountApi {
 	Employee addEmplyees(@RequestBody Employee e)
 	
 	{
-		
-
+		Collection<Role> roles = new ArrayList<Role>();
+		roles.add(roleRepository.findRoleByName("USER"));
+		Account a = new Account(null, e.getMatricule(), e.getCin(), roles);
+		userService.saveUserAccount(a);
+		e.setAccount(a);
 		return employeeService.addEmployee(e);
 	}
 	
