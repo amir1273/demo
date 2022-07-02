@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.demo.filter.CustomAuthorizationFilter;
 import com.example.demo.filter.CustomerAuthentificationFilter;
@@ -36,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
+	@CrossOrigin(origins = "http://localhost:3000" )
+
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		CustomerAuthentificationFilter customerAuthentificationFilter = new CustomerAuthentificationFilter(authenticationManagerBean());
@@ -44,14 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(STATELESS);
-		http.authorizeRequests().antMatchers("/aoi/login/**").permitAll();
+		http.authorizeRequests().antMatchers("/api/login/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/user/**").hasAnyAuthority("USER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/token/refresh/**").hasAnyAuthority("USER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**").hasAnyAuthority("ADMIN");
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority("ADMIN");		
-
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority("ADMIN");
 //		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").permitAll();		
-
 //		http.authorizeRequests().anyRequest().permitAll();
 		http.addFilter(new CustomerAuthentificationFilter(authenticationManager()));
 		http.addFilter(customerAuthentificationFilter);

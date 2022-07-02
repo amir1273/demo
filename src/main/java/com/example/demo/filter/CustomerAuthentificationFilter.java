@@ -43,7 +43,8 @@ public class CustomerAuthentificationFilter extends UsernamePasswordAuthenticati
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+		UsernamePasswordAuthenticationToken authenticationToken = 
+				new UsernamePasswordAuthenticationToken(username, password);
 		return authenticationManager.authenticate(authenticationToken);
 		//return super.attemptAuthentication(request, response);
 	}
@@ -67,10 +68,12 @@ public class CustomerAuthentificationFilter extends UsernamePasswordAuthenticati
 				.withExpiresAt(new Date(System.currentTimeMillis()+30 *60 *1000))
 				.withIssuer(request.getRequestURL().toString())
 				.sign(algorithm);
-		
-		/*response.setHeader("access_token", access_token);
-		response.setHeader("refresh_token", refresh_token);*/
-		
+
+	    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+	    response.setHeader("Access-Control-Allow-Credentials", "true");
+	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+	    response.setHeader("Access-Control-Max-Age", "3600");
+	    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 		Map<String, String> tokens = new HashMap<>();
 		tokens.put("access_token", access_token);
 		tokens.put("refresh_token", refresh_token);
